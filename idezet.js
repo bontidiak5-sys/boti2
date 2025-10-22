@@ -1,3 +1,4 @@
+// Az idézeteket ebben a tömbben tároljuk
 const idezetek = [
     { "idezet": "Az egyetlen gát a holnap megvalósítása előtt a mai kétségeink.", "szerzo": "Franklin D. Roosevelt" },
     { "idezet": "Minden nehézség közepén ott rejlik a lehetőség.", "szerzo": "Albert Einstein" },
@@ -31,46 +32,54 @@ const idezetek = [
     { "idezet": "Az életed akkor javul, ha te is fejlődsz.", "szerzo": "Brian Tracy" }
 ];
 
-let currentIndex = 0;
+
+let aktualisIndex = 0;
+
 let kedvencek = [];
 
-function showQuote(index) {
-    const quote = idezetek[index];
-    document.getElementById('quote-text').textContent = quote.idezet;
-    document.getElementById('quote-author').textContent = `- ${quote.szerzo}`;
+
+function idezetMegjelenit(index) {
+    const idezetObj = idezetek[index];
+    document.getElementById('quote-text').textContent = idezetObj.idezet;
+    document.getElementById('quote-author').textContent = `- ${idezetObj.szerzo}`;
     document.getElementById('prev-btn').disabled = index === 0;
     document.getElementById('next-btn').disabled = index === idezetek.length - 1;
 }
 
-function showFavorites() {
-    const list = document.getElementById('favorites-list');
-    list.innerHTML = '';
-    kedvencek.forEach(q => {
-        const li = document.createElement('li');
-        li.textContent = `${q.idezet} - ${q.szerzo}`;
-        list.appendChild(li);
+function kedvencekListazasa() {
+    const listaElem = document.getElementById('favorites-list');
+    listaElem.innerHTML = '';
+    kedvencek.forEach(idezetObj => {
+        const ujElem = document.createElement('li');
+        ujElem.textContent = `${idezetObj.idezet} - ${idezetObj.szerzo}`;
+        listaElem.appendChild(ujElem);
     });
 }
 
+
 document.addEventListener('DOMContentLoaded', () => {
-    showQuote(currentIndex);
+    idezetMegjelenit(aktualisIndex);
+    
     document.getElementById('prev-btn').addEventListener('click', () => {
-        if (currentIndex > 0) {
-            currentIndex--;
-            showQuote(currentIndex);
+        if (aktualisIndex > 0) {
+            aktualisIndex--;
+            idezetMegjelenit(aktualisIndex);
         }
     });
+
     document.getElementById('next-btn').addEventListener('click', () => {
-        if (currentIndex < idezetek.length - 1) {
-            currentIndex++;
-            showQuote(currentIndex);
+        if (aktualisIndex < idezetek.length - 1) {
+            aktualisIndex++;
+            idezetMegjelenit(aktualisIndex);
         }
     });
+   
     document.getElementById('fav-btn').addEventListener('click', () => {
-        const currentQuote = idezetek[currentIndex];
-        if (!kedvencek.some(q => q.idezet === currentQuote.idezet && q.szerzo === currentQuote.szerzo)) {
-            kedvencek.push(currentQuote);
-            showFavorites();
+        const aktualisIdezet = idezetek[aktualisIndex];
+        
+        if (!kedvencek.some(idezetObj => idezetObj.idezet === aktualisIdezet.idezet && idezetObj.szerzo === aktualisIdezet.szerzo)) {
+            kedvencek.push(aktualisIdezet);
+            kedvencekListazasa();
         }
     });
 });
